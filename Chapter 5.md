@@ -1,3 +1,11 @@
+## Some remarks
+### Part of speech tagging
+"'Google' is the root of the sentence". Maybe explain that ROOT is a default label / symbol linking to the start of the sentence?
+### Regular Expression
+RE combinations can be learned with ML. Teach the machine which combination of regex yields/fetches the result. No idea what the performance of these models is. Understandable is this is left out of the scope of this chapter/book.
+### Preprocessing for training with word vectors
+"...English, but in other languages it can be problematic." Are you referring to languages like German and Dutch, which have concatenated words? If you are referring to supported languages in packages (and research): yes most is in English, but SpaCy supports ~28 languages.)
+
 # Chapter 5 - Natural Language processing
 
 It is no accident that Peter Brown, Co-CEO of Renaissance Technologies, one of the most successful quantitative hedge-funds of all time, previously worked at IBM applying machine learning to natural language problems. Information drives finance, and the most important source of information is written or spoken language. Ask any professional what they are actually spending time on and you will find that a significant part of finance is about reading. Headlines on tickers, Form-10Ks, the financial press, analyst reports, the list goes on and on. Automatically processing this information can increase speed of trades and increase the breath of information considered for trades while at the same time reducing costs.
@@ -20,7 +28,7 @@ This chapter makes use of the english language models, but more are available. M
 
 The core of SpaCy are the `Doc` and `Vocab` classes. A `Doc` instance contains one document, including its text, tokenized version, recognized entities, etc. The `Vocab` class keeps track of all common information across documents. SpaCy is useful for its pipeline features, that contain many pieces needed for NLP. If this all seems a bit abstract right now, don't worry. This section will show you how to use SpaCy for many practical tasks. 
 
-The data for the first section we use a collection of 143,000 articles from 15 American publications. The data is spread out over three excel files. We can load them separately, merge them into one large dataframe and then delete the individual dataframes to save memory.
+~~The data for the first section we use a collection of 143,000 articles from 15 American publications.~~ The data we use for the first section is a collection of 143,000 articles from 15 American publications. The data is spread out over three excel files. We can load them separately, merge them into one large dataframe and then delete the individual dataframes to save memory.
 
 ```Python 
 a1 = pd.read_csv('../input/articles1.csv',index_col=0)
@@ -167,7 +175,7 @@ orgs.Text.value_counts()[:15].plot(kind='bar')
 
 ![Spacy Org Dist](./assets/spacy_org_distribution.png)
 
-As you can see, political institutions such as the senate are most frequently named in our news dataset. But some companies that were in the center of media attention are found as well. Also notice how 'the White House' and 'White House' are listed as two separate organizations. Depending in your needs you might want to do some post processing such as removing 'the' from organization names. Also note how 'Trump' is shown as an organization here. If you look at the tagged text above, you will also see that 'Trump' is tagged as a NORP, speak a political organization several times. This is because the NER infers the type of tag from context. Since Trump is U.S. president, his name often gets used in the same context as (political) organizations are. 
+As you can see, political institutions such as the senate are most frequently named in our news dataset. But some companies that were in the center of media attention are found as well. Also notice how 'the White House' and 'White House' are listed as two separate organizations. Depending in your needs you might want to do some post processing such as removing 'the' from organization names. Also note how 'Trump' is shown as an organization here. If you look at the tagged text above, you will also see that 'Trump' is tagged as ~~a~~ an NORP, **speak a political organization several times**. This is because the NER infers the type of tag from context. Since Trump is U.S. president, his name often gets used in the same context as (political) organizations are. 
 
 From here, you could conduct all kinds of other investigations. The pre-trained NER gives a powerful tool that solves many common NLP tasks.
 
@@ -531,7 +539,7 @@ Regex is a powerful tool and this very short introduction does not do it justice
 
 # A text classification task
 
-A common NLP task is to classify text. The most common text classification is done in sentiment analysis, where texts are classified as positive or negative. In this section, we will consider a slightly harder problem: Classifying whether a tweet is about an actual disaster happening or not. Today, investors have developed a number of ways to gain information from tweets. Twitter users are often faster than news outlets to report disasters, such as a fire or a flood. This speed advantage can be used for event driven trading strategies for instance. Yet, not all tweets that contain words associated with disasters are actually about disasters. A tweet like: 'California forests on fire near San-Francisco' is a tweet that should be taken into consideration while: 'California this weekend was fire, good times in San-Francisco' can be safely ignored. 
+A common NLP task is to classify text. The most common text classification is done in sentiment analysis, where texts are classified as positive or negative. In this section, we will consider a slightly harder problem: Classifying whether a tweet is about an actual disaster happening or not. Today, investors have developed a number of ways to gain information from tweets. Twitter users are often faster than news outlets to report disasters, such as a fire or a flood. This speed advantage can be used for event driven trading strategies for instance. Yet, not all tweets that contain words associated with disasters are actually about disasters. A tweet like: 'California forests on fire near San-Francisco' is a tweet that should be taken into consideration while: 'California this weekend ~~was fire~~ was on fire, good times in San-Francisco' can be safely ignored. 
 
 The goal of this task is to build a classifier that separates the tweets about real disasters from irrelevant tweets. The dataset consists of hand labeled tweets that were obtained by searching twitter for words common to disaster tweets like 'ablaze' or 'fire'.
 
@@ -777,7 +785,7 @@ n_top_words = 5
 tf_feature_names = vectorizer.get_feature_names()
 ```
 
-Now we can loop over the topics of the LDA, and print the most frequent words in in.
+Now we can loop over the topics of the LDA, and print the most frequent words **in in**.
 ```Python
 for topic_idx, topic in enumerate(lda.components_):
         message = "Topic #%d: " % topic_idx
@@ -804,7 +812,7 @@ In practice, embeddings work like a look up table. For each token, they store a 
 ## Preprocessing for training with word vectors 
 Before we start with training word embeddings though, we need to do some preprocessing steps. Namely, we need to assign each word token a number and create a numpy array full of sequences. 
 
-Assigning numbers to tokens makes the training process smoother and decouples the tokenization process from the word vectors. Keras has a `Tokenizer` class that can create numeric tokens for words. By default, this tokenizer splits text by spaces. This works mostly fine in english, but in other languages it can be problematic. It is better to tokenize the text with SpaCy first, as we already did for our two previous methods, and then assign numeric tokens with Keras. 
+Assigning numbers to tokens makes the training process smoother and decouples the tokenization process from the word vectors. Keras has a `Tokenizer` class that can create numeric tokens for words. By default, this tokenizer splits text by spaces. This works mostly fine in ~~english~~ English, but in other languages it can be problematic. It is better to tokenize the text with SpaCy first, as we already did for our two previous methods, and then assign numeric tokens with Keras.
 
 The Tokenizer also allows us to specify how many words we want to consider, so once again we will only use the 10,000 most used words.
 ```Python
